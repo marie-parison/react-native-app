@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import {NavigationActions} from 'react-navigation';
+import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
-import {ScrollView, Text, View, StyleSheet} from 'react-native';
+import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import { DrawerActions } from 'react-navigation';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class DrawerScreen extends Component {
+
   navigateToScreen = (route) => () => {
     const navigateAction = NavigationActions.navigate({
       routeName: route
@@ -15,7 +17,7 @@ class DrawerScreen extends Component {
 
   render () {
     return (
-      <View>
+      <View style={styles.container}>
         <ScrollView>
           <View>
             <View style={styles.menuItem}>
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
+        marginTop: getStatusBarHeight(),
     },
     heading: {
         fontSize: 20,
@@ -54,8 +57,9 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     menuItem:{
+        width: 300,
         padding: 10,
         borderWidth: 0.5,
-        borderColor: '#d6d7da'
+        borderColor: '#d6d7da',
     }
 });
