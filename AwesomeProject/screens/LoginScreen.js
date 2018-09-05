@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, Text, TextInput, TouchableHighlight, StyleSheet, ActivityIndicator } from 'react-native';
 
-export default class Login extends React.Component {
+export default class LoginScreen extends React.Component {
 
     constructor(props){
         super(props)
@@ -15,7 +15,7 @@ export default class Login extends React.Component {
 
         fetch(process.env.SERVER_URL + 'user')
         .then((response) => {
-          if(response.status != "200"){
+          if(response.status == "200"){
             return response.json()
           } else {
             throw 'Une erreur est survenue, veuillez ressayer'
@@ -30,6 +30,7 @@ export default class Login extends React.Component {
         })
         .finally(() => {
             this.setState({ onProgress: false })
+            this.props.navigation.navigate('Home')
         })
     }
 
