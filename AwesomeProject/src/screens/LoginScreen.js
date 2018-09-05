@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, Text, TextInput, TouchableHighlight, StyleSheet, ActivityIndicator } from 'react-native';
+import { userSignIn } from '../utils/Authentification';
 
 export default class LoginScreen extends React.Component {
 
@@ -10,35 +11,27 @@ export default class LoginScreen extends React.Component {
 
     onPressLogin(){
 
-        //TODO Vérifier que le username et le password existent
+        // if (!this.state.username || !this.state.password) {
+        //     this.setState({error : "Champs manquants"})
+        //     return;
+        // }
+
         this.setState({ onProgress: true })
 
-        fetch(process.env.SERVER_URL + 'user')
-        .then((response) => {
-          if(response.status == "200"){
-            return response.json()
-          } else {
-            throw 'Une erreur est survenue, veuillez ressayer'
-          }
-        })
-        .then((response) => {
-            
-        })
-        .catch((err) => {
-            this.setState({error : err})
-            console.log(err);
-        })
-        .finally(() => {
+        userSignIn(this.state.username, this.state.password, (result) => {
             this.setState({ onProgress: false })
-            this.props.navigation.navigate('Home')
-        })
+            if(result.success){
+                this.props.navigation.navigate('Home')
+            } else {
+                this.setState(result);
+            }       
+        });
+        
     }
-
-    // TODO Message d'erreur
 
     render(){
 
-        //TODO refactoring erreurs
+        //TODO Refactoring des erreurs
         let errorMessage = <View style={styles.hidden}/>
         if(this.state.error){
             errorMessage = <Text style={styles.errors}>{this.state.error}</Text>
