@@ -4,7 +4,7 @@ export default class User {
 
         fetch(process.env.SERVER_URL + 'user')
         .then((response) => {
-          return response.json()
+          return response.json();
         })
         .then((response) => {
           return [JSON.parse(response)]

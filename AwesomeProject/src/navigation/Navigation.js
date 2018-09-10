@@ -1,5 +1,6 @@
+import React from 'react';
 import { createStackNavigator, createDrawerNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
-import { Dimensions} from 'react-native';
+import { Dimensions, Image, AsyncStorage } from 'react-native';
 
 import Header from '../components/Header';
 import User from '../data/User'
@@ -17,6 +18,7 @@ TabNavigator.navigationOptions = ({ navigation }) => {
 
   return {
     headerTitle: routeName,
+    //headerLeft: <Image source={{uri : AsyncStorage.getItem('profile_image_url')}}/>,
   };
 };
 

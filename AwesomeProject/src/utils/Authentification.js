@@ -1,33 +1,31 @@
 import { AsyncStorage } from 'react-native'
 
-//TODO gérer les autres cas d'erreurs
-async function saveItem(item, selectedValue) {
-    try {
-      return await AsyncStorage.setItem(item, selectedValue).toPromise();
+async function saveItem(item, selectedValue) { // async retourne forcement une promise
+  try {
+      return await AsyncStorage.setItem(item, selectedValue);
     } catch (error) {
-      console.error('AsyncStorage error: ' + error.message);
+      throw "Une erreur est survenue, veuillez ressayer";
     }
-  }
+}
 
-export function userSignIn(username, password, callback) {
+//TODO vérifier pourquoi il y a redirection meme quand le serveur n'est pas lancé
+export function userSignIn(username, password, callback, errorcb) {
     
   return (
     fetch(process.env.SERVER_URL + 'user')
-    .then((response) => { 
-      if(response.status == "200"){
-        response.json()
+    .then((response) => {
+      if(response.status == 200){
+        return response.json()
       } else {
         throw "Une erreur est survenue, veuillez ressayer";
       }
     })
-    .then((result) => {
+    .then(async (result) => {
       try {
-        saveItem('user', result.name)
-        .then(() => {
-          callback({success : true });
-        })
+        await saveItem('profile_image_url', result.profile_image_url)
+        callback();
       } catch (err) {
-        callback({error : "Une erreur est survenue, veuillez ressayer"});
+        errorcb({error : "Une erreur est survenue, veuillez ressayer"});
       }
     })
     .catch((err)  => {

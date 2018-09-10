@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text, TextInput, TouchableHighlight, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Image, Text, TextInput, TouchableHighlight, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 import { userSignIn } from '../utils/Authentification';
 
 export default class LoginScreen extends React.Component {
@@ -16,17 +16,25 @@ export default class LoginScreen extends React.Component {
         //     return;
         // }
 
-        this.setState({ onProgress: true })
+        this.setState({ onProgress: true });
 
-        userSignIn(this.state.username, this.state.password, (result) => {
-            this.setState({ onProgress: false })
-            if(result.success){
-                this.props.navigation.navigate('Home')
-            } else {
-                this.setState(result);
-            }       
+        userSignIn(this.state.username, this.state.password,
+        () => {     
+            this.props.navigation.navigate('Home');      
+        },
+        (error) => {
+            this.setState({ onProgress: false });
+            this.setState(error);
         });
         
+    }
+
+    componentWillMount() {
+        AsyncStorage.getItem('user').then((name) => {
+          if(name !== null ){
+              //this.props.navigation.navigate('Home');
+          }
+        })
     }
 
     render(){
